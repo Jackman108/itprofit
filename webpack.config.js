@@ -7,13 +7,19 @@ export default {
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
+        clean: true,
+        publicPath: '/',
     },
     devServer: {
         static: {
             directory: path.join(__dirname, 'dist'),
         },
         port: 3005,
+        historyApiFallback: {
+            index: 'index.html'
+        }        
     },
+    devtool: 'eval-source-map',
     module: {
         rules: [
             {
@@ -37,7 +43,8 @@ export default {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            filename: 'index.html', 
+            filename: 'index.html',
+            publicPath: '/',
         }),
     ],
 };

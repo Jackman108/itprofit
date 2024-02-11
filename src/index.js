@@ -60,13 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.status === 'error') {
                     handleFormError(data.fields);
                 } else if (data.status === 'success') {
-                    handleFormSuccess(data.msg);
+                    handleFormSuccess(data.message);
                 }
             })
             .catch(error => {
                 console.error('Error during fetch:', error);
             });
-
     });
 
     // Обработчик события фокуса для полей ввода
@@ -100,4 +99,30 @@ document.addEventListener('DOMContentLoaded', function () {
         form.querySelectorAll('.error').forEach(error => error.textContent = '');
         form.querySelectorAll('.has-error').forEach(input => input.classList.remove('has-error'));
     }
+
+    // Обработчики событий для кнопок и модального окна
+    const modal = document.getElementById('modal');
+    const openModalButton = document.getElementById('openModal');
+    const closeModalButton = document.getElementById('close');
+
+    openModalButton.addEventListener('click', function () {
+        modal.classList.add('show');
+        // Добавляем класс для блокировки скролла
+        document.body.classList.add('modal-open'); 
+    });
+
+    closeModalButton.addEventListener('click', function () {
+        modal.classList.remove('show');
+        // Убираем класс для разблокировки скролла
+        document.body.classList.remove('modal-open'); 
+    });
+
+    // Закрытие модального окна при клике вне его
+    window.addEventListener('click', function (event) {
+        if (event.target === modal) {
+            modal.classList.remove('show');
+            // Убираем класс для разблокировки скролла
+            document.body.classList.remove('modal-open'); 
+        }
+    });
 });

@@ -11,8 +11,6 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/api/registration", (req, res) => {
-    console.log("Received data:", req.body);
-
     // Проверка наличия ошибок в данных
     const errors = validateForm(req.body);
 
@@ -28,7 +26,7 @@ app.post("/api/registration", (req, res) => {
     // В противном случае, возвращаем успешный статус
     res.status(200).json({
         status: "success",
-        msg: "You are registered"
+        message: "You are registered"
     });
 });
 

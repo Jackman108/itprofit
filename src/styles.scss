@@ -1,15 +1,24 @@
+$font-stack: "Source Code Pro", Arial, sans-serif;
+$primary-color: #007bff;
+$error-color: red;
+$light-color: #f4f4f4;
+$border-color: #ccc;
+
 /* Стили для формы обратной связи */
 body {
-    font-family: "Source Code Pro", Arial, sans-serif;
+    font-family: $font-stack;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
 }
 
 .container {
     max-width: 600px;
-    margin: 50px auto;
+    margin: 40px auto;
     padding: 20px;
-    background-color: #f4f4f4;
+    background-color: $light-color;
     border-radius: 5px;
 }
 
@@ -27,21 +36,35 @@ input[type="email"],
 textarea {
     width: 95%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid $border-color;
     border-radius: 5px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-around;
 }
 
 button[type="submit"] {
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: $primary-color;
+    color: $light-color;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-button {
+    padding: 10px 20px;
+    background-color: $primary-color;
+    color: $light-color;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .error {
-    color: red;
+    color: $error-color;
     font-size: 12px;
     margin-top: 5px;
     height: 14px;
@@ -50,14 +73,68 @@ button[type="submit"] {
 input[type="text"].has-error,
 input[type="email"].has-error,
 textarea.has-error {
-    border-color: red;
+    border-color: $error-color;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none; /* Скрываем модальное окно по умолчанию */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+    z-index: 9999; /* Выше других элементов */
+    overflow: auto; /* Добавляем прокрутку если контент не помещается */
+}
+
+.modal-content {
+    background-color: $light-color;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid $border-color;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 5px;
+    position: relative;
+}
+
+/* Кнопка закрытия */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* Анимация появления модального окна */
+.modal.show {
+    display: block;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Блокировка скролла страницы при открытом модальном окне */
+body.modal-open {
+    overflow: hidden;
+    width: calc(100% - 12px);
 }
 
 @font-face {
     font-family: "Source Code Pro";
     src:
-        local("Source Code Pro Regular"), local("Source-Code-Pro-Regular") 
-        url("./fonts/SourceCodePro-Regular.woff2") format("woff2");
+        local("Source Code Pro Regular"),
+        local("Source-Code-Pro-Regular") url("./fonts/SourceCodePro-Regular.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
 }
