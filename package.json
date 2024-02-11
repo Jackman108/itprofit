@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node --presets @babel/preset-env ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --open",
-    "build": "babel-node --presets @babel/preset-env ./node_modules/webpack/bin/webpack.js --mode production"
+    "build": "babel-node --presets @babel/preset-env ./node_modules/webpack/bin/webpack.js --mode production",
+    "server": "babel-node server/server.js"
   },
   "keywords": [],
   "author": "Eugene Korobov",
@@ -29,6 +30,8 @@
     "webpack-dev-server": "^4.15.1"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
     "inputmask": "^5.0.8"
   }
 }

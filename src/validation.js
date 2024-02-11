@@ -1,4 +1,4 @@
-export function validateForm(formData) {
+export default function validateForm(formDataObject) {
     const errors = {};
 
     const errorMessages = {
@@ -8,7 +8,8 @@ export function validateForm(formData) {
         'message': 'Message is required'
     };
 
-    formData.forEach((value, key) => {
+    Object.keys(formDataObject).forEach((key) => {
+        const value = formDataObject[key];
         if (!value.trim()) {
             errors[key] = errorMessages[key];
         } else if (key === 'email' && !/\S+@\S+\.\S+/.test(value)) {
@@ -18,5 +19,12 @@ export function validateForm(formData) {
         }
     });
 
-    return errors;
+    if (Object.keys(errors).length > 0) {
+        return {
+            status: "error",
+            fields: errors
+        };
+    } else {
+        return {}; 
+    }
 }

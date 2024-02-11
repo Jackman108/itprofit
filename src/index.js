@@ -1,13 +1,14 @@
 import './styles.scss';
 import Inputmask from 'inputmask';
-import { validateForm } from './validation';
+import validateForm from './validation';
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Инициализация маски для телефона
-    Inputmask({ mask: '+7 (999) 999-99-99' }).mask('#phone');
 
     // Получение формы по идентификатору
     const form = document.getElementById('feedback-form');
+
+    // Инициализация маски для телефона
+    Inputmask({ mask: '+7 (999) 999-99-99' }).mask('#phone');
 
     // Обработчик события отправки формы
     form.addEventListener('submit', function (event) {
@@ -16,8 +17,14 @@ document.addEventListener('DOMContentLoaded', function () {
         // Получение данных из формы
         const formData = new FormData(form);
 
+        //Преобразование FormData в объект для JSON.stringify
+        const formDataObject = {};
+        formData.forEach((value, key) => {
+            formDataObject[key] = value;
+        });
+
         // Валидация формы
-        const errors = validateForm(formData);
+        const errors = validateForm(formDataObject);
 
         // Очистка предыдущих ошибок
         form.querySelectorAll('.error').forEach(function (error) {
@@ -40,9 +47,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Если форма валидна, можно отправить данные на сервер
-        if (Object.keys(errors).length === 0) {
-            console.log("форма  валидна", formData)
-        }
+        fetch('http://localhost:9090/api/registration', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formDataObject),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Response from server:", data);
+                if (data.status === 'error') {
+                    handleFormError(data.fields);
+                } else if (data.status === 'success') {
+                    handleFormSuccess(data.msg);
+                }
+            })
+            .catch(error => {
+                console.error('Error during fetch:', error);
+            });
+
     });
 
     // Обработчик события фокуса для полей ввода
@@ -56,4 +80,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
-});  
+
+    function handleFormError(fields) {
+        for (const fieldName in fields) {
+            const errorElement = document.getElementById(`${fieldName}-error`);
+            if (errorElement) {
+                errorElement.textContent = fields[fieldName];
+                const inputElement = document.getElementById(fieldName);
+                if (inputElement) {
+                    inputElement.classList.add('has-error');
+                }
+            }
+        }
+    }
+    //Обработка ответа от сервера и вывод сообщений об ошибках
+    function handleFormSuccess(message) {
+        alert(message);
+        form.reset();
+        form.querySelectorAll('.error').forEach(error => error.textContent = '');
+        form.querySelectorAll('.has-error').forEach(input => input.classList.remove('has-error'));
+    }
+});
